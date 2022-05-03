@@ -8,12 +8,14 @@ public class InventoryViewer : MonoBehaviour
 {
     [SerializeField] GameObject itemPrefab;
 
-    // Start is called before the first frame update
+    InventoryController inventoryController;
+
     void Start()
     {
         var player = GameObject.FindWithTag("Player");
-        var inventory = player.GetComponent<InventoryController>().Inventory;
+        inventoryController = player.GetComponent<InventoryController>();
 
+        var inventory = inventoryController.Inventory;
         inventory.ObserveCountChanged(notifyCurrentCount: true).Subscribe(_ =>
         {
             foreach (Transform child in transform)
@@ -24,7 +26,10 @@ public class InventoryViewer : MonoBehaviour
 
             foreach (var item in inventory)
             {
-                Instantiate(itemPrefab, Vector3.zero, Quaternion.identity, this.transform);
+                var itemObj = Instantiate(itemPrefab, Vector3.zero, Quaternion.identity, this.transform);
+                var itemCtrl = itemObj.GetComponent<InventoryItemController>();
+                Debug.Log("gen : " + item.Name);
+                itemCtrl.holdItem = item;
             }
         });
     }
