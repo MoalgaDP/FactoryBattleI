@@ -7,11 +7,11 @@ using UnityEngine.UI;
 
 public class InventoryController : MonoBehaviour
 {
-    [SerializeField] ReactiveCollection<Item> inventory;
+    [SerializeField] ReactiveCollection<InventoryContainer> inventory;
 
-    public ReactiveCollection<Item> Inventory { get { return inventory; } }
+    public ReactiveCollection<InventoryContainer> Inventory { get { return inventory; } }
 
-    public Item HoldingItem { get; set; }
+    public InventoryContainer HoldingContainer { get; set; }
 
 
     int counter;
@@ -23,7 +23,7 @@ public class InventoryController : MonoBehaviour
             var item = gameObject.AddComponent<Item>();
             item.Instantiate(counter.ToString());
 
-            inventory.Add(item);
+            inventory.Add(new InventoryContainer(item, 10));
             counter++;
         }
     }
