@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
@@ -18,16 +20,15 @@ public class InventoryController : MonoBehaviour
         HoldingContainer = inventory[index];
     }
 
-    int counter;
+    int counter = 1;
 
     private void Update()
     {
         if (Input.GetButtonDown("Jump"))
         {
-            var item = gameObject.AddComponent<Item>();
-            item.Instantiate(counter.ToString());
-
-            inventory.Add(new InventoryContainer(item, 10));
+            // アイテムリストを順番に追加する
+            var items = Enum.GetValues(typeof(ItemName)).Cast<ItemName>().ToList();
+            inventory.Add(new InventoryContainer(items[counter % items.Count], counter));
             counter++;
         }
     }
