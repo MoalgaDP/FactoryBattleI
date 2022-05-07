@@ -7,12 +7,16 @@ using UnityEngine.UI;
 
 public class InventoryController : MonoBehaviour
 {
-    [SerializeField] ReactiveCollection<InventoryContainer> inventory;
+    [SerializeField] List<InventoryContainer> inventory;
 
-    public ReactiveCollection<InventoryContainer> Inventory { get { return inventory; } }
+    public ReactiveCollection<InventoryContainer> Inventory { get { return new ReactiveCollection<InventoryContainer>(inventory); } }
 
     public InventoryContainer HoldingContainer { get; set; }
 
+    public void changeHoldContainer(int index)
+    {
+        HoldingContainer = inventory[index];
+    }
 
     int counter;
 
