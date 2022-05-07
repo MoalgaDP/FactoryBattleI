@@ -26,8 +26,7 @@ public class InventoryViewer : MonoBehaviour
         var player = GameObject.FindWithTag("Player");
         inventoryController = player.GetComponent<InventoryController>();
 
-        var inventory = inventoryController.Inventory;
-        inventory.ObserveCountChanged(notifyCurrentCount: true).Subscribe(_ =>
+        inventoryController.ObserveEveryValueChanged(ctrl => ctrl.Inventory).Subscribe(inventory =>
         {
             if (focusObj != null)
                 Destroy(focusObj.gameObject);
@@ -47,18 +46,18 @@ public class InventoryViewer : MonoBehaviour
                     changeFocus(itemObj.transform);
                 }
             }
-
-
         });
 
-        this.ObserveEveryValueChanged(viewer => viewer.selectIndex).Subscribe(index =>
+        this.ObserveEveryValueChanged(
+            viewer => viewer.selectIndex).Subscribe(index =>
         {
             if (index < 0)
             {
                 focusObj.GetComponent<Image>().enabled = false;
                 return;
             }
-            inventoryController.HoldingContainer = inventory[index];
+
+            inventoryController.changeHoldContainer(index);
             var itemObj = transform.GetChild(index);
             changeFocus(itemObj);
         });
